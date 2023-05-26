@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first/sell.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class BuyPage extends StatelessWidget {
                  'https://th.bing.com/th/id/OIP.NOB2cDSQ4_qV6R40apkubwHaFT?pid=ImgDet&rs=1',
                  'https://th.bing.com/th/id/OIP.NOB2cDSQ4_qV6R40apkubwHaFT?pid=ImgDet&rs=1',
                  'https://th.bing.com/th/id/OIP.rXcAYgLQVaudqPUkgogP0gHaHa?pid=ImgDet&rs=1'];
+
 
 
   @override
@@ -101,6 +103,8 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

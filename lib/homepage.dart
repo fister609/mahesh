@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/profile.dart';
 import 'package:first/study.dart';
 import 'package:flutter/material.dart';
@@ -178,14 +180,43 @@ class _EventsPageState extends State<EventsPage>
   }
 }
 
-class MainDrawer extends StatelessWidget
-{
+class MainDrawer extends StatefulWidget {
+  const MainDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<MainDrawer> createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
+  String name = " ";
+  String email = " ";
+  String profile = " ";
+
+  void initState() {
+    // TODO: implement initState
+    getdata();
+    super.initState();
+  }
+
+  getdata()async {
+    DocumentSnapshot snap = await FirebaseFirestore.instance.collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    DocumentSnapshot pro = await FirebaseFirestore.instance.collection("profile")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    setState(() {
+      name = (snap.data() as Map<String, dynamic>)['Name'];
+      email = (snap.data() as Map<String, dynamic>)['Email'];
+      profile = (pro.data() as Map<String, dynamic>)['Profile'];
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(0),
       children: [
-        const DrawerHeader(
+         DrawerHeader(
 
           decoration: BoxDecoration(
             color: Colors.deepOrange,
@@ -193,18 +224,23 @@ class MainDrawer extends StatelessWidget
           child: UserAccountsDrawerHeader(
             decoration: BoxDecoration(color: Colors.deepOrange),
             accountName: Text(
-              "Username",
+              "$name",
               style: TextStyle(fontSize: 18),
             ),
-            accountEmail: Text("username@gmail.com"),
+            accountEmail: Text("$email"),
             currentAccountPictureSize: Size.square(50),
-            currentAccountPicture: CircleAvatar(
+            currentAccountPicture:
+            profile == null?
+            CircleAvatar(
+              backgroundImage: NetworkImage('https://i.pinimg.com/736x/09/24/a7/0924a7ef295741e916c8f42512bbe5bd.jpg'),
               backgroundColor: Colors.white,
-              child: Text(
-                "U",
-                style: TextStyle(fontSize: 30.0, color: Colors.blue),
-              ), //Text
-            ), //circleAvatar
+              maxRadius: 80,
+            ):
+            CircleAvatar(
+              backgroundImage: NetworkImage(profile!),
+              backgroundColor: Colors.white,
+              maxRadius: 80,
+            ),
           ), //UserAccountDrawerHeader
         ),
         Padding(
@@ -265,3 +301,7 @@ class MainDrawer extends StatelessWidget
     );
   }
 }
+
+
+
+

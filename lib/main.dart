@@ -1,17 +1,15 @@
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/Authenticate/LoginScree.dart';
-
+import 'package:first/Authenticate/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-
 import 'homepage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:firebase_core/firebase_core.dart';
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/assets/icon_updated.png');
+
 }
 
 main() async{
@@ -43,8 +41,6 @@ class SplashScreen extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
-    String? uid;
-    uid = FirebaseAuth.instance.currentUser?.uid;
 
     return AnimatedSplashScreen(
         splash: Column(
@@ -55,8 +51,7 @@ class SplashScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         duration: 2500 ,
-
-        nextScreen: uid!=null?HomePage():LoginScreen(),
+        nextScreen: FirebaseAuth.instance.currentUser!=null?HomePage():LoginScreen(),
         splashIconSize: 300,
         splashTransition: SplashTransition.scaleTransition,
     );

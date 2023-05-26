@@ -1,4 +1,5 @@
-import 'package:first/Authenticate/Methods.dart';
+
+import 'package:first/Authenticate/LoginScreen.dart';
 import 'package:first/Screens/ChatRoom.dart';
 import 'package:first/group_chats/group_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     await _firestore
         .collection('users')
-        .where("email", isEqualTo: _search.text)
+        .where("name", isEqualTo: _search.text)
         .get()
         .then((value) {
       setState(() {
@@ -76,9 +77,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Screen"),
+        title: Text("Chat Screen"),
         actions: [
-          IconButton(icon: Icon(Icons.logout), onPressed: () => logOut(context))
+          IconButton(icon: Icon(Icons.logout), onPressed: () => SignOut())
         ],
       ),
       body: isLoading
@@ -163,4 +164,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       ),
     );
   }
+  SignOut(){
+    FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+  }
+
 }
